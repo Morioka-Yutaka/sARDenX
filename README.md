@@ -7,12 +7,12 @@ sARDenX is an extension of sARDen, aiming to generate CDISC ARD (Analysis Result
 
 ## `%sard_stats_t_test()` macro <a name="sardstatsttest-macro-2"></a> ######
 
-Purpose:  
+### Purpose:  
   Performs a two-sample t-test using PROC TTEST and returns ARD-style results.  
   The macro outputs group means, confidence intervals, and test statistics  
   in a standardized long-format dataset.  
 
-Parameters:  
+### Parameters:  
 ~~~text
   data      - Input dataset.
   class     - Grouping (classification) variable with two levels.
@@ -35,12 +35,12 @@ Outputs:
               - method, alternative, conf.level, mu, var.equal, paired
 ~~~
 
-Notes:  
+### Notes:  
   - Assumes exactly two groups in &class.
   - One-sided direction depends on the ordering of CLASS levels in PROC TTEST.
   - Intermediate datasets are created in WORK and deleted at the end.
 
-Example:  
+### Example:  
 ~~~sas
   %sard_stats_t_test(
     data=ADSL,
