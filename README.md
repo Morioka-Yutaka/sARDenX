@@ -40,7 +40,7 @@ Outputs:
   - One-sided direction depends on the ordering of CLASS levels in PROC TTEST.
   - Intermediate datasets are created in WORK and deleted at the end.
 
-### Example:  
+### Usage Example:  
 ~~~sas
   %sard_stats_t_test(
     data=ADSL,
@@ -57,4 +57,49 @@ Outputs:
 <img width="1376" height="420" alt="image" src="https://github.com/user-attachments/assets/4b6384cb-17a8-42e8-92af-ce7a6b5f536f" />
 
 
+---
+
+## `%sard_stats_fisher_test()` macro <a name="sardstatsfishertest-macro-1"></a> ######
+
+### Purpose:
+  Performs Fisher's exact test for a 2x2 (or RxC) contingency table by  
+  aggregating counts and calling PROC FREQ with the FISHER option.  
+  The macro returns ARD-style p-value and method/alternative metadata.  
+
+### Inputs:  
+~~~text
+  data      - Input dataset.
+  classdata - Optional CLASSDATA= dataset for PROC SUMMARY (formats/order).
+  group     - Row (grouping) variable for the contingency table.
+  var       - Column (categorical) variable for the contingency table.
+  side      - Alternative hypothesis:
+              2 or B = two-sided (default),
+              L      = one-sided (lower/left tail),
+              U or R = one-sided (upper/right tail).
+~~~
+
+### Outputs:
+  out       - Output dataset in ARD-style structure with:
+              - method (Fisher's Exact Test)
+              - alternative (two.sided / less / greater)
+              - p.value (exact Fisher p-value)
+
+### Notes:
+  - The meaning of "less" and "greater" depends on the ordering of
+    levels in &group and &var as used in TABLES &group * &var.
+  - Missing values in &group or &var are excluded unless PROC SUMMARY
+    is modified with MISSING.
+  - Intermediate datasets are created in WORK and deleted at the end.
+
+### Usage Example:
+~~~sas
+  %sard_stats_fisher_test(
+    data=ADSL,
+    out=sard_stats_fisher_test,
+    group=TRT01PN,
+    var=SEX,
+    side=2
+  );
+~~~
+  
 ---
