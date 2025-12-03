@@ -53,5 +53,8 @@ Outputs:
     Welch=Y
   );
 ~~~
-  
+
+<img width="1376" height="420" alt="image" src="https://github.com/user-attachments/assets/4b6384cb-17a8-42e8-92af-ce7a6b5f536f" />
+
+
 ---
