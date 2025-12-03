@@ -125,6 +125,10 @@ Outputs:
   );
 ~~~
 
+<img width="1506" height="154" alt="image" src="https://github.com/user-attachments/assets/23da4f9a-f27e-4c37-bbc6-4b2a20ef269a" />
+
+
+---
 
 # version history<br>
 0.1.0(03December2025): Initial version<br>
