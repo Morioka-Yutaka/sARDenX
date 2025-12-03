@@ -4,6 +4,29 @@ sARDenX is an extension of sARDen, aiming to generate CDISC ARD (Analysis Result
 
 <img width="360" height="360" alt="sARDenX_small" src="https://github.com/user-attachments/assets/dc81318f-e972-482e-bd6a-fa46423465b7" />
 
+## Test Data
+We use ADSL and ADAE created as test data with the “sas_faker” package (https://github.com/Morioka-Yutaka/sas_faker),   
+but you can freely substitute typical ADSL/ADAE datasets instead, so feel free to adapt that part as you like.
+~~~sas
+%loadPackage(sas_faker)
+%sas_faker(
+n_groups=3, 
+n_per_group=50,
+output_lib=WORK,
+seed =123456,
+create_dm = N,
+create_ae = N,
+create_sv =  N,
+create_vs = N,
+create_adsl = Y,
+create_adae = Y,
+create_advs = N
+);
+~~~~
+[ADSL]  
+<img width="767" height="176" alt="image" src="https://github.com/user-attachments/assets/af49ad5f-15c6-4156-ba91-ee336cb86317" />  
+[ADAE]  
+<img width="758" height="235" alt="image" src="https://github.com/user-attachments/assets/1a0beab0-c842-4124-ac21-2fa284a642a8" />  
 
 ## `%sard_stats_t_test()` macro <a name="sardstatsttest-macro-2"></a> ######
 
@@ -101,5 +124,8 @@ Outputs:
     side=2
   );
 ~~~
-  
+<img width="1512" height="152" alt="image" src="https://github.com/user-attachments/assets/f1c707b2-c592-4c47-8445-565acd2914e9" />
+
+
+
 ---
