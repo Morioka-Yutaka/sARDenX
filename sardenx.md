@@ -9,17 +9,17 @@
 ### Version information:
   
 - Package: sARDenX
-- Version: 0.1.0
-- Generated: 2025-12-03T18:30:14
+- Version: 0.1.1
+- Generated: 2026-11-11T18:50:13
 - Author(s): Yutaka Morioka(sasyupi@gmail.com)
 - Maintainer(s): Yutaka Morioka(sasyupi@gmail.com)
 - License: MIT
-- File SHA256: `F*8754FF41B56DFF6877CB665CDCEEB78F98FA253D3445BD990A346804276620D5` for this version
-- Content SHA256: `C*BC0FB8C11C7FB005D13F92D8D6C3C6583D3880C67CB49D00D62F74CDF6D13CD0` for this version
+- File SHA256: `F*7886FF3ABB808F1018F6676746F2CCB5A394D5252F2968268BB0EC98B7AE4893` for this version
+- Content SHA256: `C*EA4282199A7D1EC1CD1F8AAF72115F64034215BB43263362FFA2310AC9876771` for this version
   
 ---
  
-# The `sARDenX` package, version: `0.1.0`;
+# The `sARDenX` package, version: `0.1.1`;
   
 ---
  
@@ -47,9 +47,10 @@ The `sARDenX` package consists of the following content:
  
 1. [`%sard_stats_fisher_test()` macro ](#sardstatsfishertest-macro-1 )
 2. [`%sard_stats_t_test()` macro ](#sardstatsttest-macro-2 )
+3. [`%sard_stats_wilcox_test()` macro ](#sardstatswilcoxtest-macro-3 )
   
  
-3. [License note](#license)
+4. [License note](#license)
   
 ---
  
@@ -143,12 +144,86 @@ Example:
   
 ---
  
+## `%sard_stats_wilcox_test()` macro <a name="sardstatswilcoxtest-macro-3"></a> ######
+
+Purpose:
+  Performs a two-sample Wilcoxon rank-sum test using PROC NPAR1WAY
+  and returns ARD-style results aligned with cardx conventions.
+
+  The macro additionally requests Hodges-Lehmann estimation of the
+  location shift and its confidence interval.
+
+Inputs:
+  data      - Input dataset.
+  out       - Output ARD-style dataset.
+                Default: sard_stats_wilcox_test
+  class     - Grouping variable. Must contain exactly two non-missing levels.
+  var       - Numeric analysis variable.
+  side      - Alternative hypothesis:
+                2   = two-sided (default)
+                L   = one-sided lower-tail
+                U/R = one-sided upper-tail
+  exact     - Whether to calculate exact Wilcoxon p-values and exact
+                Hodges-Lehmann confidence limits:
+                Y = exact inference
+                N = asymptotic inference (default)
+  correct   - Whether to use the continuity correction for asymptotic
+                Wilcoxon p-values:
+                Y = use correction (default)
+                N = do not use correction
+  alpha     - Significance level for Hodges-Lehmann confidence limits.
+                Default: 0.05, corresponding to a 95% confidence interval.
+
+Outputs:
+  out       - Long-format ARD-style dataset containing:
+                statistic    - Wilcoxon W statistic, calculated from the
+                               rank sum of the first sorted CLASS level
+                p.value      - Wilcoxon p-value
+                method       - Test method
+                alternative  - Alternative hypothesis
+                exact        - Whether exact inference was requested
+                mu           - Null location shift (0)
+                correct      - Continuity-correction indicator
+                estimate     - Hodges-Lehmann location-shift estimate
+                conf.low     - Lower confidence limit for the location shift
+                conf.high    - Upper confidence limit for the location shift
+                conf.level   - Confidence level
+
+Notes:
+  - Missing CLASS and VAR values are excluded from the analysis.
+  - The macro requires exactly two non-missing CLASS levels.
+  - The returned statistic is converted to the R/cardx-style W statistic:
+      W = rank-sum(Group 1) - n1 * (n1 + 1) / 2
+    where Group 1 is the first sorted level of CLASS.
+  - PROC NPAR1WAY's Hodges-Lehmann estimate and one-sided p-values follow
+    SAS CLASS-level and reference-group conventions. Their direction is not
+    internally reversed to mimic R factor-level conventions.
+  - When EXACT=Y, the macro requests exact Wilcoxon p-values and exact
+    Hodges-Lehmann confidence limits via:
+      EXACT WILCOXON HL;
+  - Intermediate WORK datasets are deleted at completion.
+
+Example:
+  %sard_stats_wilcox_test(
+    data=ADSL,
+    out=sard_stats_wilcox_test,
+    class=TRT01PN,
+    var=AGE,
+    side=2,
+    exact=N,
+    correct=Y,
+    alpha=0.05
+  );
+
+  
+---
+ 
   
 ---
  
 # License <a name="license"></a> ######
  
-	Copyright (c) [2025]  [Yutaka Morioka]
+	Copyright (c) [2026]  [Yutaka Morioka]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy   
 of this software and associated documentation files (the "Software"), to deal    
