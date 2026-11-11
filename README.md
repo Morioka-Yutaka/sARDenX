@@ -130,7 +130,88 @@ Outputs:
 
 ---
 
+## `%sard_stats_wilcox_test()` macro <a name="sardstatswilcoxtest-macro-3"></a> ######
+
+### Purpose:
+  Performs a two-sample Wilcoxon rank-sum test using PROC NPAR1WAY
+  and returns ARD-style results aligned with cardx conventions.
+
+  The macro additionally requests Hodges-Lehmann estimation of the
+  location shift and its confidence interval.
+
+### Inputs:
+~~~text
+  data      - Input dataset.
+  out       - Output ARD-style dataset.
+                Default: sard_stats_wilcox_test
+  class     - Grouping variable. Must contain exactly two non-missing levels.
+  var       - Numeric analysis variable.
+  side      - Alternative hypothesis:
+                2   = two-sided (default)
+                L   = one-sided lower-tail
+                U/R = one-sided upper-tail
+  exact     - Whether to calculate exact Wilcoxon p-values and exact
+                Hodges-Lehmann confidence limits:
+                Y = exact inference
+                N = asymptotic inference (default)
+  correct   - Whether to use the continuity correction for asymptotic
+                Wilcoxon p-values:
+                Y = use correction (default)
+                N = do not use correction
+  alpha     - Significance level for Hodges-Lehmann confidence limits.
+                Default: 0.05, corresponding to a 95% confidence interval.
+~~~
+### Outputs:
+~~~text
+  out       - Long-format ARD-style dataset containing:
+                statistic    - Wilcoxon W statistic, calculated from the
+                               rank sum of the first sorted CLASS level
+                p.value      - Wilcoxon p-value
+                method       - Test method
+                alternative  - Alternative hypothesis
+                exact        - Whether exact inference was requested
+                mu           - Null location shift (0)
+                correct      - Continuity-correction indicator
+                estimate     - Hodges-Lehmann location-shift estimate
+                conf.low     - Lower confidence limit for the location shift
+                conf.high    - Upper confidence limit for the location shift
+                conf.level   - Confidence level
+~~~
+### Notes:
+  - Missing CLASS and VAR values are excluded from the analysis.
+  - The macro requires exactly two non-missing CLASS levels.
+  - The returned statistic is converted to the R/cardx-style W statistic:
+      W = rank-sum(Group 1) - n1 * (n1 + 1) / 2
+    where Group 1 is the first sorted level of CLASS.
+  - PROC NPAR1WAY's Hodges-Lehmann estimate and one-sided p-values follow
+    SAS CLASS-level and reference-group conventions. Their direction is not
+    internally reversed to mimic R factor-level conventions.
+  - When EXACT=Y, the macro requests exact Wilcoxon p-values and exact
+    Hodges-Lehmann confidence limits via:
+      EXACT WILCOXON HL;
+  - Intermediate WORK datasets are deleted at completion.
+
+Example:
+~~~sas
+%sard_stats_wilcox_test(
+  data        = adsl,
+  out         = sard_wilcox_test,
+  class       = SEX,
+  var         = AGE,
+  side = 2,
+  exact       = N,
+  correct     = Y,
+  alpha       = 0.05
+);
+~~~
+
+<img width="1334" height="364" alt="image" src="https://github.com/user-attachments/assets/917848dd-6b36-47fc-b405-ed266864d51b" />
+
+
+---
+
 # version history<br>
+0.1.1(11November2026): Add Wilcoxon rank-sum test <br>
 0.1.0(03December2025): Initial version<br>
 
 ## What is SAS Packages?
