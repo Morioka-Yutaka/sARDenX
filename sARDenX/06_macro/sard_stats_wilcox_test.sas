@@ -240,7 +240,7 @@ data sard_wilcox_result;
    */
   call missing(of stat_name stat_label stat fmt_fun context sas_raw_stat);
   stat_name   = "statistic";
-  stat_label  = "X-squared Statistic";
+  stat_label  = "Wilcoxon W Statistic";
   stat        = statistic;
   fmt_fun     = "1";
   sas_raw_stat = "_WIL_ converted to R/cardx W";
